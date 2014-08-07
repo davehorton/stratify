@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/css/datepicker3.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Stratify</a>
+                </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <!--
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Help</a></li>
+                            -->
+                        </ul>
+                        <!--
+                        <form class="navbar-form navbar-right">
+                            <input type="text" class="form-control" placeholder="Search...">
+                        </form>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Import Members File</a></li>
+                <li><a href="#">Generate Mailing</a></li>
+            </ul>
+            <!--
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item</a></li>
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+                <li><a href="">More navigation</a></li>
+            </ul>
+            <ul class="nav nav-sidebar">
+                <li><a href="">Nav item again</a></li>
+                <li><a href="">One more nav</a></li>
+                <li><a href="">Another nav item</a></li>
+            </ul>
+            -->
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-top:20px;">
+            <div id="upload-in-progress" class="alert alert-warning" role="alert" style="display: none;">
+                <p>Another strat import is currently in progress.  Please wait until the current import completes before importing your file.</p>
+                <p class="small">(Note: this message will automatically disappear when the import completes)</p>
+            </div>
+            <div class="row well">
+                <form id="upload-form" class="horizontal-form" role="form">
+
+                    <div class="form-group">
+                        <label for="uploadFile" class="col-sm-2 control-label">Data File</label>
+                        <div class="col-sm-10">
+                            <input type="file" id="upload-file" name="upload-file" tabindex="1">
+                            <p class="help-block">Must be a csv file of a specified format.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gateway" class="col-sm-2 control-label">Gateway</label>
+                        <div class="col-sm-10">
+                            <select id="gateway" name="gateway" class="form-control" tabindex="2">
+                                <option value="-1">Select...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="csv" class="col-sm-2 control-label">CSV Drop</label>
+                        <div class="col-sm-10">
+                            <input id="csv" name="csv" class="form-control" type="text" tabindex="3" placeholder="specify a shared directory accessible from the server">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="good" class="col-sm-2 control-label">Success Drop</label>
+                        <div class="col-sm-10">
+                            <input id="good" name="good" class="form-control" type="text" tabindex="4" placeholder="specify a shared directory accessible from the server">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bad" class="col-sm-2 control-label">Failed Drop</label>
+                        <div class="col-sm-10">
+                            <input id="bad" name="bad" class="form-control" type="text" tabindex="5" placeholder="specify a shared directory accessible from the server">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sfdc" class="col-sm-2 control-label">SFDC Drop</label>
+                        <div class="col-sm-10">
+                            <input id="sfdc" name="sfdc" class="form-control" type="text" tabindex="6" placeholder="specify a shared directory accessible from the server">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-2">
+                            <button type="submit" class="btn btn-default btn-lg btn-primary" disabled="disabled">Import File</button>
+                        </div>
+                </form>
+            </div>
+        </div>   
+
+        <!-- handlebars -->
+        <script id="upload-error-template" type="text/x-handlebars-template">
+            <div class="col-sm-7 alert alert-danger alert-dismissible" role="alert" style="display: none;">
+                  <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Error: </strong><span>{{reason}}</span>
+            </div>
+        </script>
+        <script id="upload-success-template" type="text/x-handlebars-template">
+            <div class="col-sm-7 alert alert-success alert-dismissible" role="alert" style="display: none;">
+                  <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Success! </strong><span>Your strat upload is is progress and should complete shortly.</span>
+            </div>
+        </script>
+
+
+        <!-- endhandlebars -->
+
+        <!-- build:js scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="../bower_components/underscore/underscore.js"></script>
+        <script src="../bower_components/handlebars/handlebars.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="../bower_components/bootstrap/js/affix.js"></script>
+        <script src="../bower_components/bootstrap/js/alert.js"></script>
+        <script src="../bower_components/bootstrap/js/dropdown.js"></script>
+        <script src="../bower_components/bootstrap/js/tooltip.js"></script>
+        <script src="../bower_components/bootstrap/js/modal.js"></script>
+        <script src="../bower_components/bootstrap/js/transition.js"></script>
+        <script src="../bower_components/bootstrap/js/button.js"></script>
+        <script src="../bower_components/bootstrap/js/popover.js"></script>
+        <script src="../bower_components/bootstrap/js/carousel.js"></script>
+        <script src="../bower_components/bootstrap/js/scrollspy.js"></script>
+        <script src="../bower_components/bootstrap/js/collapse.js"></script>
+        <script src="../bower_components/bootstrap/js/tab.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/main.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

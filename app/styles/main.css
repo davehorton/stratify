@@ -1,0 +1,13 @@
+.horizontal-form .form-group {
+    margin-bottom: 20px ;
+    min-height: 30px ;
+}
+
+.horizontal-form .form-group label{
+    padding-top: 5px ;
+}
+
+#upload-form .form-group .alert-dismissible {
+    margin-top: -5px ;
+    margin-left: -20px ;
+}
