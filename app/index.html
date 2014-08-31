@@ -10,13 +10,12 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/css/datepicker.css" />
-    <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/css/datepicker3.css" />
+    <link rel="stylesheet" href="../bower_components/ladda-bootstrap/dist/ladda-themeless.min.css">
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/dashboard.css">
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
     </head>
@@ -32,104 +31,226 @@
                     </button>
                     <a class="navbar-brand" href="#">Stratify</a>
                 </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <!--
-                            <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">Settings</a></li>
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Help</a></li>
-                            -->
-                        </ul>
-                        <!--
-                        <form class="navbar-form navbar-right">
-                            <input type="text" class="form-control" placeholder="Search...">
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar panel-selector">
+                    <li class="active"><a href="#upload">Import Members File</a></li>
+                    <li><a href="#mailer">Generate Mailing</a></li>
+                </ul>
+            </div>
+
+            <div class="panel-wrapper">
+
+                <!-- upload panel -->
+                <div id="upload" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-top:20px;">
+                    <div id="upload-in-progress" class="alert alert-warning" role="alert" style="display: none;">
+                        <p>Another strat import is currently in progress.  Please wait until the current import completes before importing your file.</p>
+                        <p class="small">(Note: this message will automatically disappear when the import completes)</p>
+                    </div>
+                    <div class="row well">
+                        <form id="upload-form" class="horizontal-form" role="form">
+
+                            <div class="form-group">
+                                <label for="uploadFile" class="col-sm-2 control-label required">Data File</label>
+                                <div class="col-sm-10">
+                                    <input type="file" id="upload-file" name="upload-file" tabindex="1">
+                                    <p class="help-block">Must be a csv file of a specified format.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gateway" class="col-sm-2 control-label required">Program</label>
+                                <div class="col-sm-10">
+                                    <select id="program" name="program" class="form-control" tabindex="2">
+                                        <option value="-1">Select...</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="csv" class="col-sm-2 control-label required">CSV Drop</label>
+                                <div class="col-sm-10">
+                                    <input id="csv" name="csv" class="form-control" type="text" tabindex="3" placeholder="specify a shared directory accessible from the server">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="good" class="col-sm-2 control-label required">Success Drop</label>
+                                <div class="col-sm-10">
+                                    <input id="good" name="good" class="form-control" type="text" tabindex="4" placeholder="specify a shared directory accessible from the server">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bad" class="col-sm-2 control-label required">Failed Drop</label>
+                                <div class="col-sm-10">
+                                    <input id="bad" name="bad" class="form-control" type="text" tabindex="5" placeholder="specify a shared directory accessible from the server">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sfdc" class="col-sm-2 control-label required">SFDC Drop</label>
+                                <div class="col-sm-10">
+                                    <input id="sfdc" name="sfdc" class="form-control" type="text" tabindex="6" placeholder="specify a shared directory accessible from the server">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-2">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block ladda-button" data-style="expand-right" disabled>
+                                        <span class="ladda-label">Import File</span>
+                                        <span class="ladda-spinner"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </form>
-                        -->
+                    </div>
+                </div>   
+
+
+                <div id="mailer" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-top:20px; display: none;">
+                    <div class="row">
+                        <div class="well pull-left">
+                            <form id="mailer-prep" role="form">
+                                <fieldset>
+                                    <legend>First, select patients</legend>
+                                    <label class="required">Program</label>
+                                    <select id="mailer-program" name="mailer-program" class="form-control" tabindex="1">
+                                        <option value="-1">Select..</option>
+                                    </select>
+                                    <!--
+                                    <label>Date</label>
+                                    <input class="span2 date" type="text" name="date" class="form-control" data-date-format="mm/dd/yyyy">
+                                    -->
+                                    <label class="required">State</label>
+                                    <select name="state" id="state" class="form-control" tabindex="2">
+                                        <option value="" selected="selected">Select..</option> 
+                                        <option value="AL">Alabama</option> 
+                                        <option value="AK">Alaska</option> 
+                                        <option value="AZ">Arizona</option> 
+                                        <option value="AR">Arkansas</option> 
+                                        <option value="CA">California</option> 
+                                        <option value="CO">Colorado</option> 
+                                        <option value="CT">Connecticut</option> 
+                                        <option value="DE">Delaware</option> 
+                                        <option value="DC">District Of Columbia</option> 
+                                        <option value="FL">Florida</option> 
+                                        <option value="GA">Georgia</option> 
+                                        <option value="HI">Hawaii</option> 
+                                        <option value="ID">Idaho</option> 
+                                        <option value="IL">Illinois</option> 
+                                        <option value="IN">Indiana</option> 
+                                        <option value="IA">Iowa</option> 
+                                        <option value="KS">Kansas</option> 
+                                        <option value="KY">Kentucky</option> 
+                                        <option value="LA">Louisiana</option> 
+                                        <option value="ME">Maine</option> 
+                                        <option value="MD">Maryland</option> 
+                                        <option value="MA">Massachusetts</option> 
+                                        <option value="MI">Michigan</option> 
+                                        <option value="MN">Minnesota</option> 
+                                        <option value="MS">Mississippi</option> 
+                                        <option value="MO">Missouri</option> 
+                                        <option value="MT">Montana</option> 
+                                        <option value="NE">Nebraska</option> 
+                                        <option value="NV">Nevada</option> 
+                                        <option value="NH">New Hampshire</option> 
+                                        <option value="NJ">New Jersey</option> 
+                                        <option value="NM">New Mexico</option> 
+                                        <option value="NY">New York</option> 
+                                        <option value="NC">North Carolina</option> 
+                                        <option value="ND">North Dakota</option> 
+                                        <option value="OH">Ohio</option> 
+                                        <option value="OK">Oklahoma</option> 
+                                        <option value="OR">Oregon</option> 
+                                        <option value="PA">Pennsylvania</option> 
+                                        <option value="RI">Rhode Island</option> 
+                                        <option value="SC">South Carolina</option> 
+                                        <option value="SD">South Dakota</option> 
+                                        <option value="TN">Tennessee</option> 
+                                        <option value="TX">Texas</option> 
+                                        <option value="UT">Utah</option> 
+                                        <option value="VT">Vermont</option> 
+                                        <option value="VA">Virginia</option> 
+                                        <option value="WA">Washington</option> 
+                                        <option value="WV">West Virginia</option> 
+                                        <option value="WI">Wisconsin</option> 
+                                        <option value="WY">Wyoming</option>                                    
+                                    </select>
+                                    <label class="required">Mailing Number</label>
+                                    <select name="mailing-number" id="mailing-number" class="form-control" tabindex="3">
+                                        <option value="1" selected="selected">1st</option>
+                                        <option value="2">2nd</option>
+                                        <option value="3">3rd</option>
+                                    </select>
+                                    <label>Letter Count</label>
+                                    <input name="max-letters" type="number" min="1" class="form-control" tabindex="4" placeholder="optional">
+                                </fieldset>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary btn-block ladda-button" data-style="expand-right" disabled>
+                                        <span class="ladda-label">Retrieve</span>
+                                        <span class="ladda-spinner"></span>
+                                    </button>
+                                </div>
+                                <div class="form-messages alert"></div>                                    
+                            </form>
+                        </div>
+                        <div class="well pull-left">
+                            <form id="zipcode-search" class="form-search">
+                                <legend>Then, select zipcodes and generate mailing</legend>
+
+                                <input type="search" results="5" placeholder="zip search" disabled>
+                                <button type="submit" class="btn-sm btn-default" style="display: none;">Search</button>
+                            </form>
+                            <table id="results" class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Zip Code</th>
+                                        <th style="text-align: right;">Possible Mailings</th>
+                                        <th style="text-align: right;">Letter Count</th>
+                                        <th><input type="checkbox" name="select-all"><span>Select All</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="default">
+                                        <td colspan="4">No results</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="summary">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Selected Zip Codes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="default">
+                                            <td>None Selected</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span>Total Letter Count:&nbsp</span><span class="count">0</span>
+                            </div>
+                            <div id="drop">
+                                <form id="do-merge">
+                                    <label class="required">SFDC Drop</label>
+                                    <input name="sfdc-drop" type="text" class="form-control" placeholder="specify a shared directory accessible from the server" disabled="disabled">
+                                    <button type="submit" class="btn btn-primary btn-block ladda-button" data-style="expand-right" disabled>
+                                        <span class="ladda-label">Create Merge</span>
+                                        <span class="ladda-spinner"></span>
+                                    </button>
+                                     <div class="form-messages alert alert-danger">
+                                    </div>                                    
+                                </form>
+                            </div>
+                       </div>
                     </div>
                 </div>
             </div>
         </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Import Members File</a></li>
-                <li><a href="#">Generate Mailing</a></li>
-            </ul>
-            <!--
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-            </ul>
-            -->
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-top:20px;">
-            <div id="upload-in-progress" class="alert alert-warning" role="alert" style="display: none;">
-                <p>Another strat import is currently in progress.  Please wait until the current import completes before importing your file.</p>
-                <p class="small">(Note: this message will automatically disappear when the import completes)</p>
-            </div>
-            <div class="row well">
-                <form id="upload-form" class="horizontal-form" role="form">
-
-                    <div class="form-group">
-                        <label for="uploadFile" class="col-sm-2 control-label">Data File</label>
-                        <div class="col-sm-10">
-                            <input type="file" id="upload-file" name="upload-file" tabindex="1">
-                            <p class="help-block">Must be a csv file of a specified format.</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="gateway" class="col-sm-2 control-label">Gateway</label>
-                        <div class="col-sm-10">
-                            <select id="gateway" name="gateway" class="form-control" tabindex="2">
-                                <option value="-1">Select...</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="csv" class="col-sm-2 control-label">CSV Drop</label>
-                        <div class="col-sm-10">
-                            <input id="csv" name="csv" class="form-control" type="text" tabindex="3" placeholder="specify a shared directory accessible from the server">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="good" class="col-sm-2 control-label">Success Drop</label>
-                        <div class="col-sm-10">
-                            <input id="good" name="good" class="form-control" type="text" tabindex="4" placeholder="specify a shared directory accessible from the server">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="bad" class="col-sm-2 control-label">Failed Drop</label>
-                        <div class="col-sm-10">
-                            <input id="bad" name="bad" class="form-control" type="text" tabindex="5" placeholder="specify a shared directory accessible from the server">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="sfdc" class="col-sm-2 control-label">SFDC Drop</label>
-                        <div class="col-sm-10">
-                            <input id="sfdc" name="sfdc" class="form-control" type="text" tabindex="6" placeholder="specify a shared directory accessible from the server">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-2">
-                            <button type="submit" class="btn btn-default btn-lg btn-primary" disabled="disabled">Import File</button>
-                        </div>
-                </form>
-            </div>
-        </div>   
 
         <!-- handlebars -->
         <script id="upload-error-template" type="text/x-handlebars-template">
@@ -143,11 +264,37 @@
         </script>
         <script id="upload-success-template" type="text/x-handlebars-template">
             <div class="col-sm-7 alert alert-success alert-dismissible" role="alert" style="display: none;">
-                  <button type="button" class="close" data-dismiss="alert">
+                <button type="button" class="close" data-dismiss="alert">
                     <span aria-hidden="true">&times;</span>
                     <span class="sr-only">Close</span>
                 </button>
                 <strong>Success! </strong><span>Your strat upload is is progress and should complete shortly.</span>
+            </div>
+        </script>
+        <script id="results-tr-template" type="text/x-handlebars-template">
+            {{#each zip}}
+            <tr>
+                <td>{{zipcode}}</td>
+                <td style="text-align:right;">{{zipcodeOccurrences}}</td>
+                <td align="right"><input type="number" min="0" max="{{zipcode_occurrences}}" style="margin-top: -2px;"></td>
+                <td><input type="checkbox"></td>
+            </tr>
+            {{/each}}
+        </script>
+        <script id="summary-tr-template" type="text/x-handlebars-template">
+            {{#each zip}}
+            <tr>
+                <td>{{this}}</td>
+            </tr>
+            {{/each}}
+        </script>
+        <script id="mailer-alert-template" type="text/x-handlebars-template">
+            <div class="form-messages alert alert-dismissible alert-{{alert-type}}" style="display: block;">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <p>{{msg}}</p>
             </div>
         </script>
 
@@ -157,9 +304,9 @@
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../bower_components/handlebars/handlebars.js"></script>
         <script src="../bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="../bower_components/underscore/underscore.js"></script>
-        <script src="../bower_components/handlebars/handlebars.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -186,10 +333,14 @@
         <script src="../bower_components/bootstrap/js/scrollspy.js"></script>
         <script src="../bower_components/bootstrap/js/collapse.js"></script>
         <script src="../bower_components/bootstrap/js/tab.js"></script>
+        <script src="../bower_components/ladda-bootstrap/dist/spin.js"></script>
+        <script src="../bower_components/ladda-bootstrap/dist/ladda.js"></script>
         <!-- endbuild -->
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/main.js"></script>
+        <script src="scripts/upload.js"></script>
+        <script src="scripts/mailer.js"></script>
         <!-- endbuild -->
-</body>
+
+    </body>
 </html>
